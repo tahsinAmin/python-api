@@ -62,17 +62,17 @@ def api_filter():
     query_params = request.args
     
     id=query_params.get('id')
-    amenities=query_params.get('amenities')
+    amenities =query_params.get('amenities')
 
-    query = "SELECT * FROM hotels_content WHERE "
+    query = "SELECT * FROM hotels_content WHERE"
 
     if id:
-        query+=f'id={id} AND'
+        query+=f' id={id} AND'
     if amenities:
-        query+=f'id={id} AND'
+        query+=f" amenities like '%{amenities.capitalize()}%' AND"
 
-    if not (id):
-        return "ID is not given."
+    if not (id or amenities):
+        return "Nothing is given."
     
     query = query[:-4]
     print(query)
