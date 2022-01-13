@@ -61,17 +61,22 @@ def api_all():
 def api_filter():
     query_params = request.args
     
-    id=query_params.get('id')
-    amenities =query_params.get('amenities')
+    id        = query_params.get('id')
+    amenities_items = query_params.get('amenities')
+    amenities = amenities_items.split()
+    price     = query_params.get('price')
+    
 
     query = "SELECT * FROM hotels_content WHERE"
 
     if id:
         query+=f' id={id} AND'
     if amenities:
-        query+=f" amenities like '%{amenities.capitalize()}%' AND"
-
-    if not (id or amenities):
+        for item in amenities:
+            query+=f" amenities like '%{item.capitalize()}%' AND"
+    if price:
+        query+=f' price>={price} AND'
+    if not (id or amenities or price):
         return "Nothing is given."
     
     query = query[:-4]
@@ -79,14 +84,5 @@ def api_filter():
     hotels = getHotels(query)
 
     return flask.jsonify(hotels)
-
-    # if id > len(hotels) or id < 1:
-    #     return "Error: id invalid"
-
-    # results = []
-    # for hotel in hotels:
-    #     if hotel['id'] == id:
-    #         results.append(hotel)
-    # return jsonify(results)
 
 app.run()

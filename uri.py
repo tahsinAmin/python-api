@@ -8,6 +8,26 @@ while True:
     if deck1 + deck2 == 2:
         if cards1[0] == cards2[0]:
             print(0)
-    
+    else:
+        cards1 = set(cards1)
+        cards2 = set(cards2)
 
-		
+        cards1 = list(cards1)
+        cards2 = list(cards2)
+
+        cards1.sort()
+        cards2.sort()
+
+        print(cards1,cards2)
+
+        if len(cards1) < len(cards2):
+            smallList = cards1
+            bigList = cards2
+        else:
+            smallList = cards2
+            bigList = cards1
+
+        cnt = 0
+        for element in smallList:
+            cnt+= 1 if element not in bigList else 0
+        print(cnt)
