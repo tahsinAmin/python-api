@@ -61,22 +61,30 @@ def api_all():
 def api_filter():
     query_params = request.args
     
-    id        = query_params.get('id')
     amenities_items = query_params.get('amenities')
-    amenities = amenities_items.split()
-    price     = query_params.get('price')
-    
+    amenities       = amenities_items.split()
+    id              = query_params.get('id')
+    location        = query_params.get('location')
+    price           = query_params.get('price')
+    title           = query_params.get('title')
+    sort            = query_params.get('sort')    
 
     query = "SELECT * FROM hotels_content WHERE"
 
     if id:
         query+=f' id={id} AND'
+    if location:
+        query+=f" location like '%{location.capitalize()}%' AND"
     if amenities:
         for item in amenities:
             query+=f" amenities like '%{item.capitalize()}%' AND"
     if price:
         query+=f' price>={price} AND'
-    if not (id or amenities or price):
+    if title:
+        query+=f" title like '%{title.capitalize()}%' AND"
+    if sort:
+        query = query[:-4] + ' ORDER BY price AND'
+    if not (id or amenities or price or title):
         return "Nothing is given."
     
     query = query[:-4]
